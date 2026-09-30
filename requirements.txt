@@ -1,0 +1,5 @@
+# Requirements file
+# Add package dependencies here when needed (e.g., pandas, numpy)
+# The tests for this project rely on pytest
+pytest>=8.2
+
