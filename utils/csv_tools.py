@@ -93,6 +93,50 @@ def compute_average(rows: Iterable[Dict[str, str]], column_name: str) -> float:
         raise NonNumericError(column_name)
     return statistics.mean(values)
 
+# ---------------------------------------------------------------------------
+# Output formatting helpers and average+count
+# ---------------------------------------------------------------------------
+import json
+
+
+def format_output(result: dict, format_type: str) -> str:
+    """Return a formatted string for *result*.
+
+    Parameters
+    ----------
+    result:
+        Dict containing ``column``, ``average`` and ``count``.
+    format_type:
+        One of ``"csv"``, ``"json"`` or ``"tsv"``.
+    """
+    if format_type == "csv":
+        return f"Average of column '{result['column']}': {result['average']:.3f}"
+    elif format_type == "json":
+        return json.dumps(result, separators=(",", ": "))
+    elif format_type == "tsv":
+        return ("column\taverage\tcount\n" +
+                f"{result['column']}\t{result['average']}\t{result['count']}")
+    else:
+        raise ValueError(f"Unsupported format type: {format_type}")
+
+
+def compute_average_and_count(rows: Iterable[Dict[str, str]], column_name: str):
+    """Compute average and count of numeric values in *column_name*.
+    """
+    values = []
+    for row in rows:
+        try:
+            val = _to_float(row[column_name])
+        except KeyError as exc:
+            raise MissingColumnError(column_name) from exc
+        except ValueError:
+            continue
+        values.append(val)
+    if not values:
+        raise NonNumericError(column_name)
+    return statistics.mean(values), len(values)
+
+
 
 def filter_rows(csv_path: str, column: str, value: str):
     """Return only rows from *csv_path* where *column* equals *value*.

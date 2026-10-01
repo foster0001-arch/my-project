@@ -22,7 +22,7 @@ root = Path(__file__).parent
 if str(root) not in sys.path:
     sys.path.insert(0, str(root))
 
-from utils.exceptions import CSVError
+from utils.csv_tools import read_csv, compute_average, filter_rows, compute_average_and_count, format_output
 
 
 def parse_args(argv):
@@ -51,10 +51,11 @@ def parse_args(argv):
         help="Name of the column to average. Column must contain numeric values.",
     )
     parser.add_argument(
-        "--filter-value",
+        "--output-format",
         type=str,
-        default=None,
-        help="Filter rows where the specified column equals this value before averaging.",
+        choices=["csv", "json", "tsv"],
+        default="csv",
+        help="Output format: csv, json, or tsv.",
     )
 
     return parser.parse_args(argv)
@@ -77,12 +78,18 @@ def main(argv=None):
         rows = read_csv(str(file_path))
 
     try:
-        avg = compute_average(rows, args.column)
+        avg, count = compute_average_and_count(rows, args.column)
     except CSVError as exc:
         print(f"Error computing average: {exc}", file=sys.stderr)
         sys.exit(1)
 
-    print(f"Average of column '{args.column}': {avg:.3f}")
+    result_dict = {
+        "column": args.column,
+        "average": avg,
+        "count": count,
+    }
+    output = format_output(result_dict, args.output_format)
+    print(output)
 
 
 if __name__ == "__main__":
