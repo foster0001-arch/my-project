@@ -15,8 +15,8 @@ from typing import Dict
 
 import pytest
 
-# Import the helpers under test
 from utils.csv_tools import read_csv, compute_average
+from utils.exceptions import MissingColumnError, NonNumericError
 
 
 def write_csv(path: Path, rows: list[Dict[str, str]]) -> None:
@@ -73,12 +73,12 @@ class TestComputeAverage:
 
     def test_missing_column_raises(self) -> None:
         rows = [{"value": "1"}, {"other": "2"}]
-        with pytest.raises(ValueError, match="Missing column 'value'"):
+        with pytest.raises(MissingColumnError, match="Missing column 'value'"):
             compute_average(rows, "value")
 
     def test_no_numeric_throws(self) -> None:
         rows = [{"value": "abc"}, {"value": ""}]
-        with pytest.raises(ValueError, match="No numeric values found"):
+        with pytest.raises(NonNumericError, match="No numeric values found"):
             compute_average(rows, "value")
 
 # End of file.

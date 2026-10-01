@@ -22,7 +22,7 @@ root = Path(__file__).parent
 if str(root) not in sys.path:
     sys.path.insert(0, str(root))
 
-from utils.csv_tools import read_csv, compute_average, filter_rows
+from utils.exceptions import CSVError
 
 
 def parse_args(argv):
@@ -78,7 +78,7 @@ def main(argv=None):
 
     try:
         avg = compute_average(rows, args.column)
-    except ValueError as exc:
+    except CSVError as exc:
         print(f"Error computing average: {exc}", file=sys.stderr)
         sys.exit(1)
 

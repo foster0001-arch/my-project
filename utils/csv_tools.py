@@ -13,6 +13,7 @@ import csv
 import statistics
 import math
 from pathlib import Path
+from utils.exceptions import CSVError, MissingColumnError, NonNumericError, EmptyDataError
 from typing import Dict, Iterable, List
 
 
@@ -34,7 +35,10 @@ def read_csv(file_path: str) -> List[Dict[str, str]]:
     """
     with Path(file_path).open("r", newline="") as f:
         reader = csv.DictReader(f)
-        return list(reader)
+        rows = list(reader)
+        if not rows:
+            raise EmptyDataError(file_path)
+        return rows
 
 
 def _to_float(value: str):
@@ -79,14 +83,14 @@ def compute_average(rows: Iterable[Dict[str, str]], column_name: str) -> float:
         try:
             val = _to_float(row[column_name])
         except KeyError as exc:
-            raise ValueError(f"Missing column '{column_name}' in row {i}") from exc
-        except ValueError as exc:
+            raise MissingColumnError(column_name) from exc
+        except ValueError:
             # Skip non‑numeric or missing values
             continue
         values.append(val)
 
     if not values:
-        raise ValueError(f"No numeric values found for column '{column_name}'")
+        raise NonNumericError(column_name)
     return statistics.mean(values)
 
 
