@@ -11,7 +11,6 @@ Typical usage::
 If no arguments are supplied we simply print a short help
 message so the user knows how to invoke the program.
 """
-
 import argparse
 import sys
 from pathlib import Path
@@ -23,6 +22,7 @@ if str(root) not in sys.path:
     sys.path.insert(0, str(root))
 
 from utils.csv_tools import read_csv, compute_average, filter_rows, compute_average_and_count, format_output
+from utils.exceptions import CSVError
 
 
 def parse_args(argv):
@@ -56,6 +56,12 @@ def parse_args(argv):
         choices=["csv", "json", "tsv"],
         default="csv",
         help="Output format: csv, json, or tsv.",
+    )
+    parser.add_argument(
+        "--filter-value",
+        type=str,
+        default=None,
+        help="Filter rows where column equals this value",
     )
 
     return parser.parse_args(argv)
