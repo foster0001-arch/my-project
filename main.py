@@ -1,16 +1,3 @@
-"""Entry point for the CLI application.
-
-The primary purpose of this script is to provide a simple
-command‑line interface that demonstrates how the helper
-functions in ``utils/csv_tools.py`` can be used.
-
-Typical usage::
-
-    python -m main --file data.csv --column value
-
-If no arguments are supplied we simply print a short help
-message so the user knows how to invoke the program.
-"""
 import argparse
 import sys
 from pathlib import Path
@@ -21,7 +8,7 @@ root = Path(__file__).parent
 if str(root) not in sys.path:
     sys.path.insert(0, str(root))
 
-from utils.csv_tools import read_csv, compute_average, filter_rows, compute_average_and_count, format_output
+from utils.csv_tools import read_csv, compute_average, filter_rows, compute_average_and_count, format_output, sort_rows
 from utils.exceptions import CSVError
 
 
@@ -33,6 +20,8 @@ def parse_args(argv):
     demonstration purposes.  ``--column`` selects the column whose
     values will be averaged.  ``--filter-value`` filters rows where
     the specified column equals this value before averaging.
+    ``--sort-by`` sorts the rows before averaging.  The ``--reverse``
+    flag can be used with ``--sort-by`` to sort in descending order.
     """
     parser = argparse.ArgumentParser(
         description="Compute the mean of a numeric column in a CSV file.",
@@ -63,6 +52,17 @@ def parse_args(argv):
         default=None,
         help="Filter rows where column equals this value",
     )
+    parser.add_argument(
+        "--sort-by",
+        type=str,
+        default=None,
+        help="Sort rows by this column before averaging (numeric if possible).",
+    )
+    parser.add_argument(
+        "--reverse",
+        action="store_true",
+        help="Sort descending when used with --sort-by.",
+    )
 
     return parser.parse_args(argv)
 
@@ -77,8 +77,10 @@ def main(argv=None):
         print(f"Error: file '{file_path}' does not exist", file=sys.stderr)
         sys.exit(1)
 
-    # Load and optionally filter rows
-    if args.filter_value is not None:
+    # Load and optionally filter or sort rows
+    if args.sort_by:
+        rows = sort_rows(str(file_path), args.sort_by, reverse=args.reverse)
+    elif args.filter_value is not None:
         rows = filter_rows(str(file_path), args.column, args.filter_value)
     else:
         rows = read_csv(str(file_path))

@@ -1,9 +1,13 @@
 """Utility functions for working with CSV files.
 
-The module exposes two straightforward helpers:
+The module exposes several helpers:
 
 * ``read_csv`` – read a CSV file into a list of dictionaries.
 * ``compute_average`` – calculate the mean of a numeric column.
+* ``filter_rows`` – return only rows that match a specific value.
+* ``compute_average_and_count`` – return mean and count of numeric values.
+* ``format_output`` – format results in CSV, JSON, or TSV.
+* ``sort_rows`` – sort rows by a column (numeric if possible).
 
 These helpers are intentionally lightweight so they can be used
 by other scripts or extended in the future.
@@ -93,6 +97,7 @@ def compute_average(rows: Iterable[Dict[str, str]], column_name: str) -> float:
         raise NonNumericError(column_name)
     return statistics.mean(values)
 
+
 # ---------------------------------------------------------------------------
 # Output formatting helpers and average+count
 # ---------------------------------------------------------------------------
@@ -118,6 +123,7 @@ def format_output(result: dict, format_type: str) -> str:
                 f"{result['column']}\t{result['average']}\t{result['count']}")
     else:
         raise ValueError(f"Unsupported format type: {format_type}")
+
 
 
 def compute_average_and_count(rows: Iterable[Dict[str, str]], column_name: str):
@@ -159,4 +165,60 @@ def filter_rows(csv_path: str, column: str, value: str):
     return [row for row in rows if row.get(column) == value]
 
 
-__all__ = ["read_csv", "compute_average", "filter_rows"]
+# ---------------------------------------------------------------------------
+# New functionality: sorting
+# ---------------------------------------------------------------------------
+
+def sort_rows(csv_path: str, column: str, reverse: bool = False) -> List[Dict[str, str]]:
+    """Return the rows from *csv_path* sorted by *column*.
+
+    The column is treated as numeric if all values can be converted to
+    ``float``.  If a conversion fails on a row, the row is treated as a
+    string value.  Missing columns raise :class:`MissingColumnError`.
+
+    Parameters
+    ----------
+    csv_path:
+        Path to the CSV file.
+    column:
+        Name of the column to sort by.
+    reverse:
+        If ``True`` the list is sorted in descending order.
+
+    Returns
+    -------
+    list[dict[str, str]]
+        Sorted list of row dictionaries.
+    """
+    rows = read_csv(csv_path)
+    if not rows:
+        return []
+    if column not in rows[0]:
+        raise MissingColumnError(column)
+
+    # Detect if the column is numeric by trying the first non‑empty value
+    def is_numeric(val: str) -> bool:
+        try:
+            float(val)
+            return True
+        except Exception:
+            return False
+
+    samples = [row[column] for row in rows if row[column]]
+    numeric = all(is_numeric(v) for v in samples) if samples else False
+
+    if numeric:
+        key = lambda r: float(r[column]) if r[column] else float('-inf')
+    else:
+        key = lambda r: r[column]
+    return sorted(rows, key=key, reverse=reverse)
+
+
+__all__ = [
+    "read_csv",
+    "compute_average",
+    "filter_rows",
+    "compute_average_and_count",
+    "format_output",
+    "sort_rows",
+]
