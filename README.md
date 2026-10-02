@@ -1,3 +1,4 @@
+![Tests](https://github.com/foster0001-arch/my-project/actions/workflows/tests.yml/badge.svg)
 # CSV Filter & Average CLI
 
 A simple command‑line utility for reading a CSV file, filtering rows and
