@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>my-project — бесплатный AI‑агент для разработки</title>
+  <style>
+    body {margin:0;font-family:system-ui, -apple-system, sans-serif;background:#1e1e1e;color:#e0e0e0;line-height:1.6;}
+    a {color:#9cdcfe;text-decoration:none;}
+    a:hover{ text-decoration:underline; }
+    .container{max-width:960px;margin:auto;padding:1rem;}
+    .header{display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:2rem;}
+    .badges{display:flex;flex-wrap:wrap;gap:0.5rem;justify-content:center;margin-top:0.5rem;}
+    .badge{padding:0.25rem 0.75rem;font-size:0.8rem;background:#3c3c3c;border-radius:0.3rem;}
+    button{background:#4e5b6b;color:#e0e0e0;border:none;padding:0.5rem 1rem;border-radius:0.3rem;margin:0.5rem 0.5rem 0 0;cursor:pointer;}
+    button:hover{background:#5d6e82;}
+    .section{margin-bottom:2rem;}
+    h2{font-size:1.5rem;margin-bottom:0.5rem;}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;}
+    .card{background:#2e2e2e;padding:1rem;border-radius:0.5rem;}
+    .card h3{margin-top:0;font-size:1.2rem;}
+    ul{margin:0;padding-left:1.25rem;}
+    li{margin-bottom:0.5rem;}
+    @media(max-width:600px){body{font-size:0.95rem;}}
+    footer{font-size:0.8rem;color:#aaa;text-align:center;border-top:1px solid #444;padding-top:1rem;margin-top:2rem;}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>my-project — бесплатный AI‑агент для разработки</h1>
+      <div class="badges">
+        <span class="badge">Tests passing</span>
+        <span class="badge">Python 3.x</span>
+        <span class="badge">License MIT</span>
+      </div>
+      <button onclick="location.href='https://github.com/foster0001-arch/my-project'">Открыть на GitHub</button>
+    </div>
+
+    <div class="section" id="what-does-it-do">
+      <h2>Что умеет агент</h2>
+      <div class="cards">
+        <div class="card"><h3>✏️ Пишет код</h3><p>Автоматическое написание и рефакторинг кода по описанию задачи.</p></div>
+        <div class="card"><h3>🧪 Создает тесты</h3><p>Генерирует unit‑тесты и покрывает критические ветки.</p></div>
+        <div class="card"><h3>🐞 Исправляет баги</h3><p>Анализирует логи ошибок и применяет исправления.</p></div>
+        <div class="card"><h3>📄 Документация</h3><p>Автогенерирует README, docstrings и конвееры.</p></div>
+        <div class="card"><h3>⚙️ CI/CD</h3><p>Конфигурирует GitHub Actions и деплой.</p></div>
+        <div class="card"><h3>💾 Git</h3><p>Автоматическое создание коммитов, PR‑ов и веток.</p></div>
+      </div>
+    </div>
+
+    <div class="section" id="what-has-been-done">
+      <h2>Что сделано</h2>
+      <ul>
+        <li>✅ 16 тестов с полным покрытием</li>
+        <li>✅ 2 релиза (v1.0.0, v1.1.0)</li>
+        <li>✅ 3 формата вывода (CSV, JSON, TSV)</li>
+        <li>✅ CI/CD (GitHub Actions)</li>
+      </ul>
+    </div>
+
+    <div class="section" id="where-apply">
+      <h2>Где использовать</h2>
+      <div class="cards">
+        <div class="card"><h3>🛠️ Разработка</h3><p>Помощь в написании кодов и ускорение итераций.</p></div>
+        <div class="card"><h3>📊 Работа с данными</h3><p>Модели и пайплайны для анализа.</p></div>
+        <div class="card"><h3>🚀 DevOps</h3><p>Автоматизация деплоев и конфигураций.</p></div>
+        <div class="card"><h3>📚 Документация</h3><p>Генерация и поддержка docs.</p></div>
+      </div>
+    </div>
+
+    <div class="section" id="real-results">
+      <h2>Реальные результаты</h2>
+      <div class="cards">
+        <div class="card"><h3>⏱️ Время на ревью</h3><p>Код: 16 тестов, все проходят</p></div>
+        <div class="card"><h3>🚨 Ошибки</h3><p>CI: зелёный на Python 3.10/3.11/3.12</p></div>
+        <div class="card"><h3>📈 Покрытие</h3><p>Релизы: v1.0.0 и v1.1.0</p></div>
+      </div>
+    </div>
+
+    <div class="section" id="links">
+      <h2>Полезные ссылки</h2>
+      <ul>
+        <li><a href="https://github.com/foster0001-arch/my-project">GitHub</a></li>
+        <li><a href="https://github.com/foster0001-arch/my-project/releases">Releases</a></li>
+        <li><a href="https://github.com/foster0001-arch/my-project/actions">Actions</a></li>
+        <li><a href="https://ollama.com">Ollama Cloud</a></li>
+        <li><a href="https://github.com/Alishahryar1/free-claude-code">FCC</a></li>
+      </ul>
+    </div>
+
+    <button onclick="location.href='https://github.com/foster0001-arch/my-project'">Открыть на GitHub</button>
+
+    <footer>
+      <div>Контакт: <a href="mailto:bonus01@atomicmail.io">bonus01@atomicmail.io</a></div>
+      <div>MIT License</div>
+    </footer>
+  </div>
+</body>
+</html>
