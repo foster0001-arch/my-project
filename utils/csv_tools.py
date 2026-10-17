@@ -214,6 +214,45 @@ def sort_rows(csv_path: str, column: str, reverse: bool = False) -> List[Dict[st
     return sorted(rows, key=key, reverse=reverse)
 
 
+# ---------------------------------------------------------------------------
+# New functionality: unique values
+# ---------------------------------------------------------------------------
+
+def unique_values(csv_path: str, column: str) -> List[str]:
+    """Return a list of unique values for the specified column.
+
+    Parameters
+    ----------
+    csv_path:
+        Path to the CSV file.
+    column:
+        Column name to inspect.
+
+    Returns
+    -------
+    list[str]
+        List of unique values in the order they appear in the file.
+
+    Raises
+    ------
+    MissingColumnError
+        If the column is not present in the CSV.
+    """
+    rows = read_csv(csv_path)
+    if not rows:
+        return []
+    if column not in rows[0]:
+        raise MissingColumnError(column)
+    seen: set[str] = set()
+    uniques: List[str] = []
+    for row in rows:
+        value = row.get(column)
+        if value not in seen:
+            seen.add(value)
+            uniques.append(value)
+    return uniques
+
+
 __all__ = [
     "read_csv",
     "compute_average",
@@ -221,4 +260,5 @@ __all__ = [
     "compute_average_and_count",
     "format_output",
     "sort_rows",
+    "unique_values",
 ]
